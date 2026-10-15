@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI FFCS Timetable Optimizer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div>
+        <h1>AI FFCS Timetable Optimizer</h1>
+        <p>CSP Bitmask Engine • Theory+Lab Bundling • Faculty Ratings • .ICS Calendar Export</p>
+      </div>
+      <div class="header-actions">
+        <label for="csv-file-input" class="btn secondary">Import CSV/JSON</label>
+        <input type="file" id="csv-file-input" accept=".csv,.json" style="display:none;" />
+        <button id="export-ics-btn" class="btn outline-light">Export to .ICS</button>
+        <button id="export-btn" class="btn primary">Print / PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Left Panel: Course Configuration -->
+    <section class="panel sidebar no-print">
+      <div class="panel-header">
+        <div>
+          <h2>Selected Courses</h2>
+          <span id="credit-counter" class="badge-credit">0 Credits</span>
+        </div>
+        <button id="load-demo-btn" class="btn secondary">Load Demo</button>
+      </div>
+
+      <!-- Credit Range Constraints -->
+      <div class="constraint-bar">
+        <span>Credit Limits:</span>
+        <label>Min: <input type="number" id="min-credits" value="16" min="1" max="30" /></label>
+        <label>Max: <input type="number" id="max-credits" value="27" min="1" max="30" /></label>
+      </div>
+
+      <div id="course-list"></div>
+
+      <div class="sidebar-actions">
+        <button id="add-course-btn" class="btn outline">+ Add Course</button>
+        <button id="generate-btn" class="btn primary">Optimize Timetables</button>
+      </div>
+    </section>
+
+    <!-- Right Panel: Timetable Viewer -->
+    <section class="panel preview">
+      <div class="panel-header no-print">
+        <div class="header-left">
+          <h2>Generated Schedules</h2>
+          <span id="results-count" class="badge">0 combinations</span>
+        </div>
+
+        <!-- Heuristic Sorting Controls -->
+        <div class="sort-container">
+          <label for="sort-select">Sort by:</label>
+          <select id="sort-select">
+            <option value="composite">AI Utility (Best Overall)</option>
+            <option value="rating">Top Faculty Rating</option>
+            <option value="least-gaps">Least Idle Gaps</option>
+            <option value="morning">Morning Shift (&lt; 1 PM)</option>
+            <option value="evening">Evening Shift (&gt; 2 PM)</option>
+            <option value="free-friday">Free Friday Afternoon</option>
+          </select>
+        </div>
+
+        <div class="nav-controls">
+          <button id="prev-btn" class="btn icon-btn" disabled>&larr;</button>
+          <span id="page-indicator">0 / 0</span>
+          <button id="next-btn" class="btn icon-btn" disabled>&rarr;</button>
+        </div>
+      </div>
+
+      <!-- Schedule Quality & Utility Metrics -->
+      <div id="metrics-bar" class="metrics-bar hidden">
+        <span><strong>Credits:</strong> <span id="metric-credits">0</span></span>
+        <span><strong>Avg Faculty:</strong> <span id="metric-rating">0.0</span> ★</span>
+        <span><strong>Idle Gaps:</strong> <span id="metric-gaps">0</span> hrs</span>
+        <span><strong>Morning / Evening:</strong> <span id="metric-shift">0 / 0</span></span>
+        <span><strong>Utility Score:</strong> <span id="metric-score" class="badge-score">0</span></span>
+      </div>
+
+      <!-- Status & Diagnostic Message Box -->
+      <div id="status-message" class="status-box hidden"></div>
+
+      <!-- Printable Schedule Grid -->
+      <div class="table-container" id="printable-area">
+        <table id="timetable-grid">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Mon</th>
+              <th>Tue</th>
+              <th>Wed</th>
+              <th>Thu</th>
+              <th>Fri</th>
+            </tr>
+          </thead>
+          <tbody id="timetable-body">
+            <!-- Rendered by app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
